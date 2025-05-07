@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ЕГЭ Чек-лист</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="light-mode">
+  <div class="container">
+    <h1>📝 Твой путь к 100 баллам</h1>
+
+    <!-- Тема -->
+    <button id="toggleTheme">🌙 / ☀️</button>
+
+    <!-- Фильтр -->
+    <div class="filter-section">
+      <button class="filter-btn" onclick="toggleTasks()">🔍 Показать/Скрыть задания</button>
+    </div>
+
+    <!-- Поиск -->
+    <div class="search-box">
+      <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)">
+      <br/>
+      <button onclick="scrollToTask(document.getElementById('searchInput').value)">Перейти</button>
+    </div>
+
+    <!-- Прогресс -->
+    <div class="progress-container">
+      <p id="progressText">Выполнено: 0 из 24 заданий</p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- Список заданий -->
+    <ul id="taskList" style="display: none;"></ul>
+
+    <p class="legend legend-icons">
+      ✅ — выполнил &nbsp;&nbsp; ❌ — не выполнил &nbsp;&nbsp; ⏳ — в процессе &nbsp;&nbsp; ❓ — есть вопросы &nbsp;&nbsp; 🌟 — освоено!
+    </p>
+  </div>
+
+  <!-- Частицы -->
+  <canvas id="particlesCanvas"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
