@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>ЕГЭ Чек-лист</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>ЕГЭ Чек-лист — Про</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body class="light-mode">
   <div class="container">
     <h1>📝 Твой путь к 100 баллам</h1>
 
-    <!-- Тема -->
+    <!-- Темная тема -->
     <button id="toggleTheme">🌙 / ☀️</button>
 
     <!-- Время -->
@@ -20,7 +20,7 @@
 
     <!-- Поиск -->
     <div class="search-box">
-      <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)">
+      <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)" />
       <br/>
       <button onclick="scrollToTask(document.getElementById('searchInput').value)">🔍 Перейти</button>
     </div>
@@ -36,6 +36,7 @@
     <!-- Список заданий -->
     <ul id="taskList"></ul>
 
+    <!-- Подпись -->
     <p class="legend legend-icons">
       ✅ — выполнил &nbsp;&nbsp; ❌ — не выполнил &nbsp;&nbsp; ⏳ — в процессе &nbsp;&nbsp; ❓ — есть вопросы &nbsp;&nbsp; 🌟 — освоено!
     </p>
@@ -44,6 +45,9 @@
   <!-- Частицы -->
   <canvas id="particlesCanvas"></canvas>
 
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
