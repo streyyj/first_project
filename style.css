@@ -1,13 +1,14 @@
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  padding: 40px;
   font-family: 'Inter', sans-serif;
   background-color: #f9faff;
   color: #333;
+  padding: 40px;
   transition: background-color 0.3s ease;
 }
 
@@ -20,7 +21,7 @@ body {
   max-width: 720px;
   margin: auto;
   padding: 40px;
-  background-color: #ffffff;
+  background-color: white;
   border-radius: 20px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
   position: relative;
@@ -51,11 +52,48 @@ h1 {
   color: #555;
 }
 
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-box input[type="text"] {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px 14px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.search-box button {
+  padding: 10px 20px;
+  background: linear-gradient(to right, #ff4ecd, #9d5cf8);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
 .task-row {
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 18px 20px;
+  background: #fffaf0;
+  border-radius: 16px;
+}
+
+.dark-mode .task-row {
+  background: #2d2f40;
 }
 
 .status-btn {
@@ -106,6 +144,7 @@ input[type="text"] {
   text-align: center;
   font-size: 14px;
   color: #aaa;
+  margin-top: 20px;
 }
 
 .progress-container {
@@ -144,6 +183,35 @@ input[type="text"] {
 .dark-mode #toggleTheme {
   background: #555;
   color: #fff;
+}
+
+.dashboard {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 14px;
+}
+
+.controls {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.controls button {
+  margin: 0 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #7a5af5;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.flashcard {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f0eaff;
+  border-left: 5px solid #ff4ecd;
+  border-radius: 10px;
 }
 
 canvas {
