@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="manifest" href="/manifest.json"> <!-- Для PWA -->
 </head>
 <body class="dark-mode">
   <div class="container">
@@ -39,18 +40,18 @@
     <div class="tabs">
       <button class="tab-btn active" data-tab="rus-lang">Русский язык</button>
       <button class="tab-btn" data-tab="math">Математика</button>
-      <button class="tab-btn" data-tab="history">История</button>
+      <button class="tab-btn" data-tab="informatics">Информатика</button>
     </div>
 
     <!-- Содержимое вкладок -->
     <div id="rus-lang" class="tab-content active">
-      <ul id="taskList"></ul>
+      <ul id="taskListRus"></ul>
     </div>
     <div id="math" class="tab-content">
-      <p>Здесь будет математика</p>
+      <ul id="taskListMath"></ul>
     </div>
-    <div id="history" class="tab-content">
-      <p>Здесь будет история</p>
+    <div id="informatics" class="tab-content">
+      <ul id="taskListInformatics"></ul>
     </div>
 
     <!-- Подпись -->
@@ -61,6 +62,13 @@
 
   <!-- Частицы -->
   <canvas id="particlesCanvas"></canvas>
+
+  <!-- Service Worker для PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
 
   <script src="script.js"></script>
 </body>
