@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>ЕГЭ Чек-лист PRO</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-  <link rel="manifest" href="/manifest.json"> <!-- Для PWA -->
+  <link rel="manifest" href="/manifest.json" />
 </head>
 <body class="dark-mode">
   <div class="container">
@@ -23,14 +23,14 @@
 
     <!-- Поиск -->
     <div class="search-box">
-      <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)">
+      <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)" />
       <br/>
       <button onclick="scrollToTask(document.getElementById('searchInput').value)">🔍 Перейти</button>
     </div>
 
     <!-- Прогресс -->
     <div class="progress-container">
-      <p id="progressText">Выполнено: 0 из 24 заданий</p>
+      <p id="progressText">Выполнено: 0 из 70 заданий</p>
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
       </div>
@@ -38,9 +38,9 @@
 
     <!-- Вкладки -->
     <div class="tabs">
-      <button class="tab-btn active" data-tab="rus-lang">Русский язык</button>
-      <button class="tab-btn" data-tab="math">Математика</button>
-      <button class="tab-btn" data-tab="informatics">Информатика</button>
+      <button class="tab-btn active" data-tab="rus-lang">🇷🇺 Русский язык</button>
+      <button class="tab-btn" data-tab="math">📐 Математика</button>
+      <button class="tab-btn" data-tab="informatics">💻 Информатика</button>
     </div>
 
     <!-- Содержимое вкладок -->
@@ -63,7 +63,7 @@
   <!-- Частицы -->
   <canvas id="particlesCanvas"></canvas>
 
-  <!-- Service Worker для PWA -->
+  <!-- PWA Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js');
