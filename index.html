@@ -13,6 +13,11 @@
     <!-- Тема -->
     <button id="toggleTheme">🌙 / ☀️</button>
 
+    <!-- Время -->
+    <div class="time-container">
+      <p id="realTime">🕒 Загрузка времени...</p>
+    </div>
+
     <!-- Поиск -->
     <div class="search-box">
       <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)">
@@ -26,12 +31,6 @@
       <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
       </div>
-    </div>
-
-    <!-- Календарь -->
-    <div class="calendar-container">
-      <label for="taskDate">📅 Выбери дату:</label>
-      <input type="date" id="taskDate" onchange="setDateForAll(this.value)">
     </div>
 
     <!-- Список заданий -->
