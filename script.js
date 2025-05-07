@@ -51,16 +51,15 @@ for (let i = 0; i < 80; i++) {
 animateParticles();
 
 // === Логика заданий ===
-const tasks = Array.from({ length: 24 }, (_, i) => i + 3);
+const tasks = Array.from({ length: 24 }, (_, i) => i + 3); // Задания с 3 по 26
 const taskList = document.getElementById("taskList");
 
 const savedTasks = JSON.parse(localStorage.getItem("egeTasks")) || {};
-const errorLog = localStorage.getItem("errorLog") || "";
-document.getElementById("errorLog").value = errorLog;
 
 tasks.forEach(num => {
   const taskId = "task" + num;
   const commentId = "comment" + num;
+
   const status = savedTasks[taskId]?.status || "not-done";
   const comment = savedTasks[taskId]?.comment || "";
 
@@ -78,7 +77,7 @@ tasks.forEach(num => {
   taskList.appendChild(li);
 });
 
-// === Переключение кнопок ===
+// Переключение кнопок
 taskList.addEventListener("click", e => {
   if (e.target.classList.contains("status-btn")) {
     const btn = e.target;
@@ -92,7 +91,7 @@ taskList.addEventListener("click", e => {
   }
 });
 
-// === Сохранение прогресса ===
+// Сохранение прогресса
 function saveProgress() {
   const buttons = document.querySelectorAll(".status-btn");
   const progress = {};
@@ -108,7 +107,7 @@ function saveProgress() {
   updateProgress();
 }
 
-// === Навигация ===
+// Навигация
 function scrollToTask(num) {
   const target = document.getElementById(`item-task${num}`);
   if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -121,7 +120,7 @@ function highlightTask(num) {
   if (target) target.style.backgroundColor = "#f0eaff";
 }
 
-// === Прогресс ===
+// Прогресс
 function updateProgress() {
   const total = tasks.length;
   const done = [...document.querySelectorAll(".status-btn.done")].length;
@@ -130,50 +129,29 @@ function updateProgress() {
   document.getElementById("progressFill").style.width = `${percent}%`;
 }
 
-// === Реальное время ===
+// Реальное время
 function updateRealTime() {
   const now = new Date();
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  };
   const formattedTime = now.toLocaleDateString('ru-RU', options);
   document.getElementById("realTime").textContent = "📅 Сегодня: " + formattedTime;
 }
 setInterval(updateRealTime, 1000);
 updateRealTime();
 
-// === Темная тема ===
+// Темная тема
 function toggleDarkMode() {
   document.body.classList.toggle("dark-mode");
 }
 document.getElementById("toggleTheme").onclick = toggleDarkMode;
 
-// === Статистика ===
-document.getElementById("repeatNext").textContent = tasks[Math.floor(Math.random() * tasks.length)];
-document.getElementById("errorCount").textContent = tasks.filter(num => {
-  const taskId = "task" + num;
-  return JSON.parse(localStorage.getItem("errorLog"))?.includes(taskId);
-}).length;
-
-// === Экспорт в PDF ===
-function exportToPDF() {
-  window.print(); // простой способ экспорта
-}
-
-// === Показать ошибки ===
-function showErrors() {
-  document.getElementById("errorSection").style.display = "block";
-}
-
-function saveErrorLog() {
-  localStorage.setItem("errorLog", document.getElementById("errorLog").value);
-}
-
-// === Генератор задания дня ===
-function generateDailyTask() {
-  const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
-  const flashCard = document.getElementById("flashCard");
-  flashCard.style.display = "block";
-  flashCard.innerHTML = `<strong>📌 Задание дня:</strong> №${randomTask}`;
-}
-
-// === Инициализация ===
+// Инициализация
 updateProgress();
