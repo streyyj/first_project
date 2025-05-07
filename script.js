@@ -153,5 +153,19 @@ function toggleDarkMode() {
 }
 document.getElementById("toggleTheme").onclick = toggleDarkMode;
 
+// Вкладки
+document.querySelectorAll('.tab-btn').forEach(tabBtn => {
+  tabBtn.addEventListener('click', () => {
+    document.querySelector('.tab-btn.active').classList.remove('active');
+    tabBtn.classList.add('active');
+
+    document.querySelectorAll('.tab-content').forEach(content => {
+      content.style.display = 'none';
+    });
+
+    document.getElementById(tabBtn.dataset.tab).style.display = 'block';
+  });
+});
+
 // Инициализация
 updateProgress();
