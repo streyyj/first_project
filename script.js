@@ -51,7 +51,15 @@ for (let i = 0; i < 80; i++) {
   particles.push(createParticle());
 }
 animateParticles();
-
+function checkPassword() {
+    const correctPassword = "49ipetoh!"; // замени на свой пароль
+    const input = document.getElementById("passwordInput").value;
+    if (input === correctPassword) {
+      document.getElementById("passwordModal").style.display = "none";
+    } else {
+      document.getElementById("errorMsg").innerText = "Неверный пароль";
+    }
+  }
 // === Логика заданий ===
 const tasks = Array.from({ length: 24 }, (_, i) => i + 3);
 const taskList = document.getElementById("taskList");
