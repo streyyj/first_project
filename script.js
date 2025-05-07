@@ -63,10 +63,10 @@ tasks.forEach(num => {
   const commentId = "comment" + num;
   const linkId = "link" + num;
   const fileId = "file" + num;
-  const dateId = "date" + num;
 
   const status = savedTasks[taskId]?.status || "not-done";
-  const userDate = savedTasks[taskId]?.date || "";
+  const comment = savedTasks[taskId]?.comment || "";
+  const link = savedTasks[taskId]?.link || "";
 
   const li = document.createElement("li");
   li.id = `item-${taskId}`;
@@ -75,12 +75,12 @@ tasks.forEach(num => {
       <button class="status-btn ${status}" data-task="${taskId}">${status === "done" ? "Выполнено" : "Не выполнено"}</button>
       <div style="flex:1;">
         <span class="label-text">Задание ${num}</span><br/>
-        <textarea id="${commentId}" placeholder="Напиши заметку о задании..." oninput="saveProgress()">${savedTasks[taskId]?.comment || ""}</textarea>
-        <input type="text" id="${linkId}" placeholder="Ссылка или файл..." value="${savedTasks[taskId]?.link || ""}" oninput="saveProgress()">
+        <textarea id="${commentId}" placeholder="Напиши заметку о задании..." oninput="saveProgress()">${comment}</textarea>
+        <input type="text" id="${linkId}" placeholder="Ссылка или файл..." value="${link}" oninput="saveProgress()">
         <br/><br/>
-        <input type="date" id="${dateId}" value="${userDate}" onchange="saveProgress()" style="width: 100%; max-width: 200px; padding: 6px;">
-        <br/><br/>
-        <input type="file" id="${fileId}" onchange="saveFile(${num})" style="width: 100%;">
+        <input type="file" id="${fileId}" onchange="saveFile(${num})" style="width: 100%; max-width: 200px; padding: 6px;">
+        <span id="fileName${num}" style="margin-left: 10px;">${savedTasks[taskId]?.file?.name || ""}</span>
+        <button onclick="deleteFile(${num})" id="deleteBtn${num}" style="margin-left: 10px; display: ${savedTasks[taskId]?.file ? 'inline-block' : 'none'};">🗑️ Удалить</button>
       </div>
     </div>
   `;
@@ -109,13 +109,12 @@ function saveProgress() {
     const taskId = btn.dataset.task;
     const commentId = "comment" + taskId.replace("task", "");
     const linkId = "link" + taskId.replace("task", "");
-    const dateId = "date" + taskId.replace("task", "");
 
     progress[taskId] = {
       status: btn.classList.contains("done") ? "done" : "not-done",
       comment: document.getElementById(commentId).value,
       link: document.getElementById(linkId).value,
-      date: document.getElementById(dateId).value
+      file: savedTasks[taskId]?.file || null
     };
   });
   localStorage.setItem("egeTasks", JSON.stringify(progress));
@@ -144,17 +143,31 @@ function updateProgress() {
   document.getElementById("progressFill").style.width = `${percent}%`;
 }
 
-// Календарь
-function setDateForAll(date) {
-  document.querySelectorAll("[id^='date']").forEach(input => {
-    input.value = date;
-  });
-  saveProgress();
+// Реальное время
+function updateRealTime() {
+  const now = new Date();
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  };
+  const formattedTime = now.toLocaleDateString('ru-RU', options);
+  document.getElementById("realTime").textContent = "📅 Сегодня: " + formattedTime;
 }
 
-// Файлы
+setInterval(updateRealTime, 1000);
+updateRealTime();
+
+// Загрузка файла
 function saveFile(taskNum) {
   const fileInput = document.getElementById("file" + taskNum);
+  const fileNameSpan = document.getElementById("fileName" + taskNum);
+  const deleteBtn = document.getElementById("deleteBtn" + taskNum);
+
   const file = fileInput.files[0];
   if (file) {
     const reader = new FileReader();
@@ -169,8 +182,25 @@ function saveFile(taskNum) {
       const saved = JSON.parse(localStorage.getItem("egeTasks")) || {};
       saved[taskKey] = { ...saved[taskKey], file: data };
       localStorage.setItem("egeTasks", JSON.stringify(saved));
+
+      fileNameSpan.textContent = file.name;
+      deleteBtn.style.display = "inline-block";
     };
     reader.readAsDataURL(file);
+  }
+}
+
+// Удаление файла
+function deleteFile(taskNum) {
+  const taskKey = "task" + taskNum;
+  const saved = JSON.parse(localStorage.getItem("egeTasks")) || {};
+
+  if (saved[taskKey] && saved[taskKey].file) {
+    delete saved[taskKey].file;
+    localStorage.setItem("egeTasks", JSON.stringify(saved));
+    document.getElementById("fileName" + taskNum).textContent = "";
+    document.getElementById("deleteBtn" + taskNum).style.display = "none";
+    document.getElementById("file" + taskNum).value = ""; // очищаем инпут
   }
 }
 
