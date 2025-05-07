@@ -52,7 +52,7 @@ for (let i = 0; i < 80; i++) {
 }
 animateParticles();
 function checkPassword() {
-    const correctPassword = "12345"; // замени на свой пароль
+    const correctPassword = "49ipetoh!"; // замени на свой пароль
     const input = document.getElementById("passwordInput").value;
     if (input === correctPassword) {
       document.getElementById("passwordModal").style.display = "none";
@@ -141,11 +141,6 @@ function updateProgress() {
   document.getElementById("progressFill").style.width = `${percent}%`;
 }
 
-// Кнопка фильтра
-function toggleTasks() {
-  const list = document.getElementById("taskList");
-  list.style.display = list.style.display === "none" ? "block" : "none";
-}
 
 // Тема
 function toggleDarkMode() {
