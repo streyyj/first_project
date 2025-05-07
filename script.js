@@ -51,9 +51,9 @@ for (let i = 0; i < 80; i++) {
 animateParticles();
 
 // === Логика заданий ===
-const rusTasks = Array.from({ length: 24 }, (_, i) => i + 3); // Задания с 3 по 26
-const mathTasks = Array.from({ length: 19 }, (_, i) => i + 1); // Задания с 1 по 19
-const informaticsTasks = Array.from({ length: 27 }, (_, i) => i + 1); // Задания с 1 по 27
+const rusTasks = Array.from({ length: 24 }, (_, i) => i + 3); // 3–26
+const mathTasks = Array.from({ length: 19 }, (_, i) => i + 1); // 1–19
+const informaticsTasks = Array.from({ length: 27 }, (_, i) => i + 1); // 1–27
 
 const taskListRus = document.getElementById("taskListRus");
 const taskListMath = document.getElementById("taskListMath");
@@ -61,68 +61,31 @@ const taskListInformatics = document.getElementById("taskListInformatics");
 
 const savedTasks = JSON.parse(localStorage.getItem("egeTasks")) || {};
 
-rusTasks.forEach(num => {
-  const taskId = "taskRus" + num;
-  const commentId = "commentRus" + num;
+function renderTasks(tasks, prefix, container) {
+  tasks.forEach(num => {
+    const taskId = `task${prefix}${num}`;
+    const commentId = `comment${prefix}${num}`;
+    const status = savedTasks[taskId]?.status || "not-done";
+    const comment = savedTasks[taskId]?.comment || "";
 
-  const status = savedTasks[taskId]?.status || "not-done";
-  const comment = savedTasks[taskId]?.comment || "";
-
-  const li = document.createElement("li");
-  li.id = `item-${taskId}`;
-  li.innerHTML = `
-    <div class="task-row">
-      <button class="status-btn ${status}" data-task="${taskId}">${status === "done" ? "Выполнено" : "Не выполнено"}</button>
-      <div style="flex:1;">
-        <span class="label-text">Задание ${num}</span><br/>
-        <textarea id="${commentId}" placeholder="Напиши заметку о задании..." oninput="saveProgress()">${comment}</textarea>
+    const li = document.createElement("li");
+    li.id = `item-${taskId}`;
+    li.innerHTML = `
+      <div class="task-row">
+        <button class="status-btn ${status}" data-task="${taskId}">${status === "done" ? "Выполнено" : "Не выполнено"}</button>
+        <div style="flex:1;">
+          <span class="label-text">Задание ${num}</span><br/>
+          <textarea id="${commentId}" placeholder="Напиши заметку о задании..." oninput="saveProgress()">${comment}</textarea>
+        </div>
       </div>
-    </div>
-  `;
-  taskListRus.appendChild(li);
-});
+    `;
+    container.appendChild(li);
+  });
+}
 
-mathTasks.forEach(num => {
-  const taskId = "taskMath" + num;
-  const commentId = "commentMath" + num;
-
-  const status = savedTasks[taskId]?.status || "not-done";
-  const comment = savedTasks[taskId]?.comment || "";
-
-  const li = document.createElement("li");
-  li.id = `item-${taskId}`;
-  li.innerHTML = `
-    <div class="task-row">
-      <button class="status-btn ${status}" data-task="${taskId}">${status === "done" ? "Выполнено" : "Не выполнено"}</button>
-      <div style="flex:1;">
-        <span class="label-text">Задание ${num}</span><br/>
-        <textarea id="${commentId}" placeholder="Напиши заметку о задании..." oninput="saveProgress()">${comment}</textarea>
-      </div>
-    </div>
-  `;
-  taskListMath.appendChild(li);
-});
-
-informaticsTasks.forEach(num => {
-  const taskId = "taskInformatics" + num;
-  const commentId = "commentInformatics" + num;
-
-  const status = savedTasks[taskId]?.status || "not-done";
-  const comment = savedTasks[taskId]?.comment || "";
-
-  const li = document.createElement("li");
-  li.id = `item-${taskId}`;
-  li.innerHTML = `
-    <div class="task-row">
-      <button class="status-btn ${status}" data-task="${taskId}">${status === "done" ? "Выполнено" : "Не выполнено"}</button>
-      <div style="flex:1;">
-        <span class="label-text">Задание ${num}</span><br/>
-        <textarea id="${commentId}" placeholder="Напиши заметку о задании..." oninput="saveProgress()">${comment}</textarea>
-      </div>
-    </div>
-  `;
-  taskListInformatics.appendChild(li);
-});
+renderTasks(rusTasks, "Rus", taskListRus);
+renderTasks(mathTasks, "Math", taskListMath);
+renderTasks(informaticsTasks, "Informatics", taskListInformatics);
 
 // Переключение кнопок
 document.querySelectorAll(".task-row").forEach(row => {
@@ -147,7 +110,7 @@ function saveProgress() {
     const commentId = taskId.replace("task", "comment");
     progress[taskId] = {
       status: btn.classList.contains("done") ? "done" : "not-done",
-      comment: document.getElementById(commentId).value
+      comment: document.getElementById(commentId)?.value || ""
     };
   });
   localStorage.setItem("egeTasks", JSON.stringify(progress));
@@ -156,14 +119,20 @@ function saveProgress() {
 
 // Навигация
 function scrollToTask(num) {
-  const target = document.getElementById(`item-task${num}`);
+  const target = document.getElementById(`item-taskRus${num}`) || document.getElementById(`item-taskMath${num}`) || document.getElementById(`item-taskInformatics${num}`);
   if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
   else alert("Задание не найдено!");
 }
 
 function highlightTask(num) {
-  document.querySelectorAll("[id^='item-task']").forEach(el => el.style.backgroundColor = '');
-  const target = document.getElementById(`item-task${num}`);
+  [rusTasks, mathTasks, informaticsTasks].forEach(tasks => {
+    tasks.forEach(n => {
+      const el = document.getElementById(`item-taskRus${n}`) || document.getElementById(`item-taskMath${n}`) || document.getElementById(`item-taskInformatics${n}`);
+      if (el) el.style.backgroundColor = '';
+    });
+  });
+
+  const target = document.getElementById(`item-taskRus${num}`) || document.getElementById(`item-taskMath${num}`) || document.getElementById(`item-taskInformatics${num}`);
   if (target) target.style.backgroundColor = "#f0eaff";
 }
 
