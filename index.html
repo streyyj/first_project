@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
-<body class="light-mode">
+<body class="dark-mode">
   <div class="container">
     <h1>📚 Твой путь к 100 баллам</h1>
 
@@ -22,7 +22,8 @@
 
     <!-- Поиск -->
     <div class="search-box">
-      <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)">
+      <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)" />
+      <br/>
       <button onclick="scrollToTask(document.getElementById('searchInput').value)">🔍 Перейти</button>
     </div>
 
@@ -34,42 +35,17 @@
       </div>
     </div>
 
-    <!-- Дашборд -->
-    <div class="dashboard">
-      <p>🎯 Повтори через: <span id="repeatNext">—</span></p>
-      <p>🧠 Ошибки: <span id="errorCount">0</span></p>
-    </div>
-
     <!-- Список заданий -->
     <ul id="taskList"></ul>
 
-    <!-- Кнопки -->
-    <div class="controls">
-      <button onclick="generateDailyTask()">🎲 Задание дня</button>
-      <button onclick="exportToPDF()">📥 Экспорт в PDF</button>
-      <button onclick="showErrors()">🔍 Показать ошибки</button>
-    </div>
-
-    <!-- Область ошибок -->
-    <div id="errorSection" style="display:none;">
-      <h3>🟥 Частые ошибки:</h3>
-      <textarea id="errorLog" rows="5" placeholder="Записывай свои ошибки здесь..."></textarea>
-      <button onclick="saveErrorLog()">💾 Сохранить</button>
-    </div>
-
-    <!-- Карточки -->
-    <div class="flashcard" id="flashCard" style="display: none;"></div>
+    <!-- Подпись -->
+    <p class="legend legend-icons">
+      ✅ — выполнил &nbsp;&nbsp; ❌ — не выполнил &nbsp;&nbsp; ⏳ — в процессе &nbsp;&nbsp; ❓ — есть вопросы &nbsp;&nbsp; 🌟 — освоено!
+    </p>
   </div>
 
   <!-- Частицы -->
   <canvas id="particlesCanvas"></canvas>
-
-  <!-- Service Worker для PWA -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js');
-    }
-  </script>
 
   <script src="script.js"></script>
 </body>
