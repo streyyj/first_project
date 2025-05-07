@@ -51,17 +51,9 @@ for (let i = 0; i < 80; i++) {
   particles.push(createParticle());
 }
 animateParticles();
-function checkPassword() {
-    const correctPassword = "49ipetoh!"; // замени на свой пароль
-    const input = document.getElementById("passwordInput").value;
-    if (input === correctPassword) {
-      document.getElementById("passwordModal").style.display = "none";
-    } else {
-      document.getElementById("errorMsg").innerText = "Неверный пароль";
-    }
-  }
+
 // === Логика заданий ===
-const tasks = Array.from({ length: 24 }, (_, i) => i + 3);
+const tasks = Array.from({ length: 24 }, (_, i) => i + 3); // Задания с 3 по 26
 const taskList = document.getElementById("taskList");
 
 const savedTasks = JSON.parse(localStorage.getItem("egeTasks")) || {};
@@ -70,7 +62,11 @@ tasks.forEach(num => {
   const taskId = "task" + num;
   const commentId = "comment" + num;
   const linkId = "link" + num;
+  const fileId = "file" + num;
+  const dateId = "date" + num;
+
   const status = savedTasks[taskId]?.status || "not-done";
+  const userDate = savedTasks[taskId]?.date || "";
 
   const li = document.createElement("li");
   li.id = `item-${taskId}`;
@@ -81,6 +77,10 @@ tasks.forEach(num => {
         <span class="label-text">Задание ${num}</span><br/>
         <textarea id="${commentId}" placeholder="Напиши заметку о задании..." oninput="saveProgress()">${savedTasks[taskId]?.comment || ""}</textarea>
         <input type="text" id="${linkId}" placeholder="Ссылка или файл..." value="${savedTasks[taskId]?.link || ""}" oninput="saveProgress()">
+        <br/><br/>
+        <input type="date" id="${dateId}" value="${userDate}" onchange="saveProgress()" style="width: 100%; max-width: 200px; padding: 6px;">
+        <br/><br/>
+        <input type="file" id="${fileId}" onchange="saveFile(${num})" style="width: 100%;">
       </div>
     </div>
   `;
@@ -109,10 +109,13 @@ function saveProgress() {
     const taskId = btn.dataset.task;
     const commentId = "comment" + taskId.replace("task", "");
     const linkId = "link" + taskId.replace("task", "");
+    const dateId = "date" + taskId.replace("task", "");
+
     progress[taskId] = {
       status: btn.classList.contains("done") ? "done" : "not-done",
       comment: document.getElementById(commentId).value,
-      link: document.getElementById(linkId).value
+      link: document.getElementById(linkId).value,
+      date: document.getElementById(dateId).value
     };
   });
   localStorage.setItem("egeTasks", JSON.stringify(progress));
@@ -141,8 +144,37 @@ function updateProgress() {
   document.getElementById("progressFill").style.width = `${percent}%`;
 }
 
+// Календарь
+function setDateForAll(date) {
+  document.querySelectorAll("[id^='date']").forEach(input => {
+    input.value = date;
+  });
+  saveProgress();
+}
 
-// Тема
+// Файлы
+function saveFile(taskNum) {
+  const fileInput = document.getElementById("file" + taskNum);
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const taskKey = "task" + taskNum;
+      const data = {
+        name: file.name,
+        size: file.size,
+        content: e.target.result
+      };
+
+      const saved = JSON.parse(localStorage.getItem("egeTasks")) || {};
+      saved[taskKey] = { ...saved[taskKey], file: data };
+      localStorage.setItem("egeTasks", JSON.stringify(saved));
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Темная тема
 function toggleDarkMode() {
   document.body.classList.toggle("dark-mode");
 }
