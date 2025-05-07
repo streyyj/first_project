@@ -51,14 +51,19 @@ for (let i = 0; i < 80; i++) {
 animateParticles();
 
 // === Логика заданий ===
-const tasks = Array.from({ length: 24 }, (_, i) => i + 3); // Задания с 3 по 26
-const taskList = document.getElementById("taskList");
+const rusTasks = Array.from({ length: 24 }, (_, i) => i + 3); // Задания с 3 по 26
+const mathTasks = Array.from({ length: 19 }, (_, i) => i + 1); // Задания с 1 по 19
+const informaticsTasks = Array.from({ length: 27 }, (_, i) => i + 1); // Задания с 1 по 27
+
+const taskListRus = document.getElementById("taskListRus");
+const taskListMath = document.getElementById("taskListMath");
+const taskListInformatics = document.getElementById("taskListInformatics");
 
 const savedTasks = JSON.parse(localStorage.getItem("egeTasks")) || {};
 
-tasks.forEach(num => {
-  const taskId = "task" + num;
-  const commentId = "comment" + num;
+rusTasks.forEach(num => {
+  const taskId = "taskRus" + num;
+  const commentId = "commentRus" + num;
 
   const status = savedTasks[taskId]?.status || "not-done";
   const comment = savedTasks[taskId]?.comment || "";
@@ -74,12 +79,54 @@ tasks.forEach(num => {
       </div>
     </div>
   `;
-  taskList.appendChild(li);
+  taskListRus.appendChild(li);
+});
+
+mathTasks.forEach(num => {
+  const taskId = "taskMath" + num;
+  const commentId = "commentMath" + num;
+
+  const status = savedTasks[taskId]?.status || "not-done";
+  const comment = savedTasks[taskId]?.comment || "";
+
+  const li = document.createElement("li");
+  li.id = `item-${taskId}`;
+  li.innerHTML = `
+    <div class="task-row">
+      <button class="status-btn ${status}" data-task="${taskId}">${status === "done" ? "Выполнено" : "Не выполнено"}</button>
+      <div style="flex:1;">
+        <span class="label-text">Задание ${num}</span><br/>
+        <textarea id="${commentId}" placeholder="Напиши заметку о задании..." oninput="saveProgress()">${comment}</textarea>
+      </div>
+    </div>
+  `;
+  taskListMath.appendChild(li);
+});
+
+informaticsTasks.forEach(num => {
+  const taskId = "taskInformatics" + num;
+  const commentId = "commentInformatics" + num;
+
+  const status = savedTasks[taskId]?.status || "not-done";
+  const comment = savedTasks[taskId]?.comment || "";
+
+  const li = document.createElement("li");
+  li.id = `item-${taskId}`;
+  li.innerHTML = `
+    <div class="task-row">
+      <button class="status-btn ${status}" data-task="${taskId}">${status === "done" ? "Выполнено" : "Не выполнено"}</button>
+      <div style="flex:1;">
+        <span class="label-text">Задание ${num}</span><br/>
+        <textarea id="${commentId}" placeholder="Напиши заметку о задании..." oninput="saveProgress()">${comment}</textarea>
+      </div>
+    </div>
+  `;
+  taskListInformatics.appendChild(li);
 });
 
 // Переключение кнопок
-taskList.addEventListener("click", e => {
-  if (e.target.classList.contains("status-btn")) {
+document.querySelectorAll(".task-row").forEach(row => {
+  row.querySelector(".status-btn").addEventListener("click", e => {
     const btn = e.target;
     const taskId = btn.dataset.task;
     const currentStatus = btn.classList.contains("done") ? "done" : "not-done";
@@ -88,7 +135,7 @@ taskList.addEventListener("click", e => {
     btn.className = "status-btn " + newStatus;
     btn.textContent = newStatus === "done" ? "Выполнено" : "Не выполнено";
     saveProgress();
-  }
+  });
 });
 
 // Сохранение прогресса
@@ -97,7 +144,7 @@ function saveProgress() {
   const progress = {};
   buttons.forEach(btn => {
     const taskId = btn.dataset.task;
-    const commentId = "comment" + taskId.replace("task", "");
+    const commentId = taskId.replace("task", "comment");
     progress[taskId] = {
       status: btn.classList.contains("done") ? "done" : "not-done",
       comment: document.getElementById(commentId).value
@@ -122,7 +169,7 @@ function highlightTask(num) {
 
 // Прогресс
 function updateProgress() {
-  const total = tasks.length;
+  const total = rusTasks.length + mathTasks.length + informaticsTasks.length;
   const done = [...document.querySelectorAll(".status-btn.done")].length;
   const percent = Math.round((done / total) * 100);
   document.getElementById("progressText").innerText = `Выполнено: ${done} из ${total} заданий`;
@@ -132,15 +179,7 @@ function updateProgress() {
 // Реальное время
 function updateRealTime() {
   const now = new Date();
-  const options = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  };
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
   const formattedTime = now.toLocaleDateString('ru-RU', options);
   document.getElementById("realTime").textContent = "📅 Сегодня: " + formattedTime;
 }
