@@ -1,169 +1,154 @@
 * {
-    box-sizing: border-box;
-  }
-  
-  body {
-    margin: 0;
-    padding: 40px;
-    font-family: 'Inter', sans-serif;
-    background-color: #f9faff;
-    color: #333;
-    transition: background-color 0.3s ease;
-  }
-  
-  .dark-mode {
-    background-color: #1a1b26;
-    color: #f8f8f8;
-  }
-  
-  .container {
-    max-width: 720px;
-    margin: auto;
-    padding: 40px;
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
-    position: relative;
-    z-index: 2;
-    transition: background-color 0.3s ease;
-  }
-  
-  .dark-mode .container {
-    background-color: #242535;
-  }
-  
-  h1 {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: #5c4694;
-  }
-  
-  .dark-mode h1 {
-    color: #a27cf5;
-  }
-  
-  .time-container {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 16px;
-    color: #555;
-  }
-  
-  .task-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  
-  .status-btn {
-    width: 110px;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    background: linear-gradient(to right, #9d5cf8, #ff4ecd);
-    color: white;
-    box-shadow: 0 4px 10px rgba(157, 92, 248, 0.25);
-  }
-  
-  .status-btn.done {
-    background: linear-gradient(to right, #4caf50, #66bb6a);
-    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.25);
-  }
-  
-  .status-btn.not-done {
-    background: linear-gradient(to right, #ef5350, #ec407a);
-    box-shadow: 0 4px 10px rgba(239, 83, 80, 0.25);
-  }
-  
-  textarea,
-  input[type="text"],
-  input[type="date"] {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    resize: vertical;
-    font-size: 14px;
-    outline: none;
-    background: #f8f9fa;
-    transition: border 0.3s ease;
-  }
-  
-  .dark-mode textarea,
-  .dark-mode input[type="text"],
-  .dark-mode input[type="date"] {
-    background: #3b3d51;
-    color: #f8f8f8;
-    border: 1px solid #555;
-  }
-  
-  .file-upload-area {
-    border: 2px dashed #aaa;
-    padding: 20px;
-    text-align: center;
-    border-radius: 10px;
-    margin-top: 10px;
-    cursor: pointer;
-  }
-  
-  .file-upload-area.hover {
-    background: #eee;
-  }
-  
-  .legend-icons {
-    text-align: center;
-    font-size: 14px;
-    color: #aaa;
-  }
-  
-  .progress-container {
-    text-align: center;
-    margin: 20px 0;
-  }
-  
-  .progress-bar {
-    width: 100%;
-    height: 12px;
-    background: #eee;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  .progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(to right, #7a5af5, #a27cf5);
-    transition: width 0.4s ease;
-    border-radius: 10px;
-  }
-  
-  #toggleTheme {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 8px 14px;
-    background: #ddd;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  
-  .dark-mode #toggleTheme {
-    background: #555;
-    color: #fff;
-  }
-  
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
-  }
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 40px;
+  font-family: 'Inter', sans-serif;
+  background-color: #f9faff;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode {
+  background-color: #1a1b26;
+  color: #f8f8f8;
+}
+
+.container {
+  max-width: 720px;
+  margin: auto;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 2;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode .container {
+  background-color: #242535;
+}
+
+h1 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #5c4694;
+}
+
+.dark-mode h1 {
+  color: #a27cf5;
+}
+
+.time-container {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status-btn {
+  width: 110px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: linear-gradient(to right, #9d5cf8, #ff4ecd);
+  color: white;
+  box-shadow: 0 4px 10px rgba(157, 92, 248, 0.25);
+}
+
+.status-btn.done {
+  background: linear-gradient(to right, #4caf50, #66bb6a);
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.25);
+}
+
+.status-btn.not-done {
+  background: linear-gradient(to right, #ef5350, #ec407a);
+  box-shadow: 0 4px 10px rgba(239, 83, 80, 0.25);
+}
+
+textarea,
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  resize: vertical;
+  font-size: 14px;
+  outline: none;
+  background: #f8f9fa;
+  transition: border 0.3s ease;
+}
+
+.dark-mode textarea,
+.dark-mode input[type="text"] {
+  background: #3b3d51;
+  color: #f8f8f8;
+  border: 1px solid #555;
+}
+
+.legend-icons {
+  text-align: center;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.progress-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #7a5af5, #a27cf5);
+  transition: width 0.4s ease;
+  border-radius: 10px;
+}
+
+#toggleTheme {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  background: #ddd;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.dark-mode #toggleTheme {
+  background: #555;
+  color: #fff;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
