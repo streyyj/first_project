@@ -52,7 +52,7 @@ for (let i = 0; i < 80; i++) {
 }
 animateParticles();
 function checkPassword() {
-    const correctPassword = "49ipetoh!"; // замени на свой пароль
+    const correctPassword = "12345"; // замени на свой пароль
     const input = document.getElementById("passwordInput").value;
     if (input === correctPassword) {
       document.getElementById("passwordModal").style.display = "none";
