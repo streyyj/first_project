@@ -80,6 +80,35 @@ h1 {
   font-weight: 600;
 }
 
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  background: #fffaf0;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background: #e8f5e9;
+}
+
+.tab-content {
+  display: none;
+  margin-top: 20px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 .task-row {
   display: flex;
   align-items: center;
@@ -89,6 +118,7 @@ h1 {
   padding: 18px 20px;
   background: #fffaf0;
   border-radius: 16px;
+  transition: all 0.3s ease;
 }
 
 .dark-mode .task-row {
