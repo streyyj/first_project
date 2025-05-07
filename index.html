@@ -9,7 +9,12 @@
 <body class="light-mode">
   <div class="container">
     <h1>📝 Твой путь к 100 баллам</h1>
-
+    <div id="passwordModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <h2>Введите пароль</h2>
+        <input type="password" id="passwordInput" placeholder="Пароль">
+        <button onclick="checkPassword()" style="margin-top: 10px;">Войти</button>
+        <p id="errorMsg" style="color: red; margin-top: 10px;"></p>
+      </div>
     <!-- Тема -->
     <button id="toggleTheme">🌙 / ☀️</button>
 
