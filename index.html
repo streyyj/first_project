@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>ЕГЭ Чек-лист PRO</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-  <link rel="manifest" href="/manifest.json" />
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body class="dark-mode">
   <div class="container">
@@ -23,7 +23,7 @@
 
     <!-- Поиск -->
     <div class="search-box">
-      <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)" />
+      <input type="text" placeholder="Поиск по номеру или заметкам..." id="searchInput" oninput="highlightTask(this.value)">
       <br/>
       <button onclick="scrollToTask(document.getElementById('searchInput').value)">🔍 Перейти</button>
     </div>
@@ -41,6 +41,8 @@
       <button class="tab-btn active" data-tab="rus-lang">🇷🇺 Русский язык</button>
       <button class="tab-btn" data-tab="math">📐 Математика</button>
       <button class="tab-btn" data-tab="informatics">💻 Информатика</button>
+      <button class="tab-btn" data-tab="theory">📖 Теория</button>
+      <button class="tab-btn" data-tab="trainer">🎯 Тренажёр</button>
     </div>
 
     <!-- Содержимое вкладок -->
@@ -53,6 +55,12 @@
     <div id="informatics" class="tab-content">
       <ul id="taskListInformatics"></ul>
     </div>
+    <div id="theory" class="tab-content">
+      <p>Здесь будет теория</p>
+    </div>
+    <div id="trainer" class="tab-content">
+      <p>Здесь будет тренажёр</p>
+    </div>
 
     <!-- Подпись -->
     <p class="legend legend-icons">
@@ -63,7 +71,7 @@
   <!-- Частицы -->
   <canvas id="particlesCanvas"></canvas>
 
-  <!-- PWA Service Worker -->
+  <!-- Service Worker для PWA -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js');
