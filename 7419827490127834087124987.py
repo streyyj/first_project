@@ -1,22 +1,38 @@
-from telethon.sync import TelegramClient
-from telethon.tl.functions.messages import SendMessageRequest
+from hikkatl.types import Message
+from .. import loader, utils
+import asyncio
 
-# Замени на свои данные
-api_id = 1234567  # Твой API ID
-api_hash = 'ваш_api_hash'  # Твой API Hash
-bot_username = '@F_CardBot'
+@loader.tds
+class AutoMatchMod(loader.Module):
+    strings = {"name": "AutoMatch"}
 
-# Создаем клиент
-client = TelegramClient('session_name', api_id, api_hash)
+    async def automatchcmd(self, m: Message):
+        chat = "@F_CardBot"  # чат с ботом
 
-async def main():
-    # Отправляем сообщение боту
-    await client(SendMessageRequest(
-        peer=bot_username,
-        message='Меню'
-    ))
-    print("Сообщение 'Меню' отправлено боту!")
+        # Шаг 1: отправляем "Меню"
+        await self.client.send_message(chat, "Меню")
+        await asyncio.sleep(2)
 
-# Запускаем клиент
-with client:
-    client.loop.run_until_complete(main())
+        # Шаг 2: ищем кнопку "⚽️ Матч" и жмём
+        async for msg in self.client.iter_messages(chat, from_user="F_CardBot", limit=5):
+            if msg.buttons:
+                for row in msg.buttons:
+                    for button in row:
+                        if "⚽️ Матч" in button.text:
+                            await button.click()
+                            await asyncio.sleep(2)  # даём время на редактирование
+                            break
+                break  # выходим из цикла, кнопку нашли и нажали
+
+        # Шаг 3: получаем последнее сообщение снова, т.к. оно было отредактировано
+        latest = (await self.client.get_messages(chat, from_user="F_CardBot", limit=1))[0]
+
+        # Шаг 4: ищем кнопку "🎮 Играть матч" и жмём
+        if latest.buttons:
+            for row in latest.buttons:
+                for button in row:
+                    if "🎮 Играть матч" in button.text:
+                        await button.click()
+                        return await m.edit("✅ Матч начат!")
+
+        await m.edit("❌ Кнопка '🎮 Играть матч' не найдена.")
