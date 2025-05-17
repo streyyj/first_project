@@ -1,37 +1,49 @@
-from hikkatl.types import Message
-from hikkatl.utils import sleep
-from hikkatl import loader
+# meta developer: @yourusername
 
-@loader.tds
-class FootCardMod(loader.Module):
-    """Автоматизация матчей в @F_CardBot"""
-    strings = {"name": "FootCardAuto"}
+from .. import loader
+import asyncio
 
-    async def client_ready(self, client, db):
-        self.client = client
+class FCardSimpleMatchMod(loader.Module):
+    """Авто-матч в @F_CardBot без зависимостей"""
+    strings = {"name": "FCardSimpleMatch"}
 
-    @loader.command()
-    async def fcmatch(self, message: Message):
-        """Запустить автоматизацию матча"""
-        # Шаг 1: Отправка "Меню"
-        await self.client.send_message("@F_CardBot", "Меню")
-        await sleep(5)
+    async def fcmatchcmd(self, message):
+        """Запускает матч: Меню → Матч → Играть матч"""
+        chat = message.chat_id
+        await message.edit("⚽️ Запускаю матч...")
 
-        # Шаг 2: Поиск и нажатие кнопки "⚽️Матч"
-        async for msg in self.client.iter_messages("@F_CardBot", limit=3):
+        # 1. Отправляем 'Меню'
+        await self.client.send_message(chat, "Меню")
+        await asyncio.sleep(3)
+
+        # 2. Ищем кнопку '⚽️ Матч'
+        msg1 = None
+        async for msg in self.client.iter_messages(chat, from_user="F_CardBot", limit=5):
             if msg.buttons:
                 for row in msg.buttons:
                     for button in row:
-                        if "⚽️Матч" in button.text:
-                            await msg.click(0)
-                            await sleep(5)
+                        if "⚽️ Матч" in button.text:
+                            msg1 = msg
+                            await button.click()
+                            await asyncio.sleep(3)
                             break
+                    if msg1:
+                        break
+            if msg1:
+                break
 
-        # Шаг 3: Поиск и нажатие кнопки "🎮Играть матч"
-        async for msg in self.client.iter_messages("@F_CardBot", limit=3):
+        if not msg1:
+            return await message.edit("❌ Не нашёл кнопку '⚽️ Матч'")
+
+        # 3. Ищем кнопку '🎮 Играть матч'
+        msg2 = None
+        async for msg in self.client.iter_messages(chat, from_user="F_CardBot", limit=5):
             if msg.buttons:
                 for row in msg.buttons:
                     for button in row:
-                        if "🎮Играть матч" in button.text:
-                            await msg.click(0)
-                            return
+                        if "🎮 Играть матч" in button.text:
+                            msg2 = msg
+                            await button.click()
+                            return await message.edit("✅ Матч сыгран!")
+
+        await message.edit("❌ Не нашёл кнопку '🎮 Играть матч'")
