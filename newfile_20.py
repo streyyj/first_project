@@ -1,67 +1,30 @@
-# scope: hikka_only
-# meta developer: @d4n13lxx
-# name: FCardShowButtons
-
+# meta developer: @your_username
 from .. import loader, utils
-from hikkatl.tl.custom import MessageButton
-import asyncio
+from telethon.tl.types import Message
 
 @loader.tds
-class FCardShowButtonsMod(loader.Module):
-    """Выводит названия всех кнопок из последнего сообщения от @F_CardBot"""
+class MatchButtonOnReply(loader.Module):
+    """Нажимает кнопку 'Матч' в сообщении, на которое ты ответил"""
 
-    strings = {
-        "name": "FCardShowButtons",
-        "no_buttons": "❌ В последнем сообщении нет кнопок.",
-        "buttons_list": "ButtonTitles:\n{}",
-        "no_message": "❌ Не получил сообщений от @F_CardBot",
-        "timeout_error": "⏳ Время ожидания истекло. Бот не ответил.",
-        "debug_info": "🔍 Отладочная информация:\nMessage text: {}\nButtons: {}"
-    }
+    strings = {"name": "MatchButtonOnReply"}
 
-    async def client_ready(self, client, db):
-        self._client = client
+    @loader.command()
+    async def match(self, message: Message):
+        """Ответь на сообщение и напиши .match"""
+        reply = await message.get_reply_message()
+        if not reply:
+            await message.edit("❌ Ответь на сообщение, где есть кнопка 'Матч'")
+            return
 
-    async def кнопкиcmd(self, message):
-        """Показать все кнопки из последнего сообщения от @F_CardBot"""
-        bot_username = "@F_CardBot"
-        timeout = 10  # секунд ожидания ответа от бота
-        attempts = 20  # количество попыток получить новое сообщение
+        if not reply.buttons:
+            await message.edit("❌ В этом сообщении нет кнопок.")
+            return
 
-        try:
-            # 🔁 Ожидаем новое сообщение от бота
-            response = await self._wait_for_new_message(bot_username, timeout, attempts)
-            if not response:
-                return await utils.answer(message, self.strings["no_message"])
+        for row in reply.buttons:
+            for button in row:
+                if "матч" in button.text.lower():
+                    await message.edit("✅ Нажимаю кнопку 'Матч'...")
+                    await button.click()
+                    return
 
-            # Проверяем наличие кнопок
-            if not response.buttons:
-                return await utils.answer(message, self.strings["no_buttons"])
-
-            # Собираем текст кнопок
-            buttons_text = []
-            for row in response.buttons:
-                for btn in row:
-                    if isinstance(btn, MessageButton):
-                        buttons_text.append(f"▫️ {btn.text}")
-
-            # Отвечаем списком кнопок под исходным сообщением
-            await utils.answer(
-                message,
-                self.strings["buttons_list"].format("\n".join(buttons_text))
-            )
-
-        except asyncio.TimeoutError:
-            await utils.answer(message, self.strings["timeout_error"])
-        except Exception as e:
-            await utils.answer(message, f"❌ Произошла ошибка: {e}")
-
-    async def _wait_for_new_message(self, bot_username, timeout, attempts):
-        """Ждёт новое сообщение от указанного бота"""
-        delay = timeout / attempts
-        for _ in range(attempts):
-            await asyncio.sleep(delay)
-            msgs = await self._client.get_messages(bot_username, limit=1)
-            if msgs:
-                return msgs[0]
-        raise asyncio.TimeoutError()
+        await message.edit("❌ Кнопка 'Матч' не найдена.")
