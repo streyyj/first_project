@@ -1,17 +1,26 @@
-from telethon.sync import TelegramClient
-from telethon.tl.functions.messages import SendMessageRequest
+# meta developer: @streyyj
 
-# Твои данные
-api_id = 1234567  # замени на свой api_id
-api_hash = 'ваш_api_hash'  # замени на свой api_hash
-bot_username = '@F_CardBot'
+from hikkatl.types import Message
+from .. import loader
 
-async def send_menu():
-    async with TelegramClient('session_name', api_id, api_hash) as client:
-        await client.start()
-        print("Клиент запущен")
-        await client(SendMessageRequest(
-            peer=bot_username,
-            message='Меню'
-        ))
-        print("Сообщение 'Меню' отправлено!")
+@loader.tds
+class AutoMatchLastMod(loader.Module):
+    strings = {"name": "AutoMatchLast"}
+
+    async def automatchlastcmd(self, message: Message):
+        chat = "@F_CardBot"
+
+        # Получаем последнее сообщение от бота
+        async for msg in self.client.iter_messages(chat, limit=10):
+            if msg.from_id and hasattr(msg.from_id, "user_id"):
+                # Можно заменить на ID бота, если знаешь (например: 123456789)
+                if msg.from_id.user_id == 6354447504:  # ← замените на ID F_CardBot при необходимости
+                    if msg.buttons:
+                        for row in msg.buttons:
+                            for button in row:
+                                if "🎮 Играть матч" in button.text:
+                                    await button.click()
+                                    return await message.edit("✅ Нажал на 'Играть матч'")
+                    return await message.edit("❌ Кнопка '🎮 Играть матч' не найдена.")
+        
+        await message.edit("❌ Не найдено последнее сообщение от бота.")
