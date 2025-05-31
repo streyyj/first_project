@@ -1,0 +1,98 @@
+# fcplay_mod.py
+
+from telethon import events, Button
+from .. import loader, utils
+
+@loader.tds
+class FootCardPlayMod(loader.Module):
+    """Auto-play match in FootCardBot (@F_CardBot)"""
+
+    strings = {
+        "name": "FootCardAutoMatch"
+    }
+
+    async def client_ready(self, client, db):
+        self.client = client
+
+    @loader.unrestricted
+    async def fcplaycmd(self, message):
+        """
+        Использование: .fcplay
+        Автоматически отправляет «Меню», кликает «⚽️ Матч» и затем «🎮 Играть матч» у бота @F_CardBot.
+        """
+        chat = await message.get_chat()
+        chat_id = chat.id
+
+        # 1) Отправляем "Меню"
+        sent = await self.client.send_message(chat_id, "Меню")
+        await utils.sleep(0.1)  # небольшая пауза, чтобы гарантировать отправку
+
+        # 2) Ждём нового сообщения от @F_CardBot
+        try:
+            resp = await self.client.wait_event(
+                events.NewMessage(
+                    chats=chat_id,
+                    from_users="F_CardBot"  # username бота без @
+                ),
+                timeout=5  # если бот не ответит за 5 секунд, выходим
+            )
+        except Exception:
+            await message.edit("❗️ Ошибка: не удалось дождаться ответа от @F_CardBot после «Меню».")
+            return
+
+        # Проверяем, есть ли у бота кнопки; если нет — сообщаем
+        if not getattr(resp, "buttons", None):
+            await message.edit("❗️ Ошибка: у полученного сообщения нет inline-кнопок.")
+            return
+
+        # 3) Ищем кнопку "⚽️ Матч" и кликаем
+        found_match = False
+        for row in resp.buttons:
+            for btn in row:
+                if btn.text == "⚽️ Матч":
+                    await resp.click(text="⚽️ Матч")
+                    found_match = True
+                    break
+            if found_match:
+                break
+
+        if not found_match:
+            await message.edit("❗️ Ошибка: не найдена кнопка «⚽️ Матч» у бота.")
+            return
+
+        # 4) Ждём редактирования того же сообщения (бот изменит клавиатуру)
+        try:
+            edited = await self.client.wait_event(
+                events.MessageEdited(
+                    chats=chat_id,
+                    from_users="F_CardBot",
+                    msg_id=resp.id
+                ),
+                timeout=5
+            )
+        except Exception:
+            await message.edit("❗️ Ошибка: не дождались редактирования сообщения после клика «⚽️ Матч».")
+            return
+
+        # Проверяем, есть ли новые кнопки
+        if not getattr(edited, "buttons", None):
+            await message.edit("❗️ Ошибка: у отредактированного сообщения нет inline-кнопок.")
+            return
+
+        # 5) Ищем кнопку "🎮 Играть матч" и кликаем
+        found_play = False
+        for row in edited.buttons:
+            for btn in row:
+                if btn.text == "🎮 Играть матч":
+                    await edited.click(text="🎮 Играть матч")
+                    found_play = True
+                    break
+            if found_play:
+                break
+
+        if not found_play:
+            await message.edit("❗️ Ошибка: не найдена кнопка «🎮 Играть матч» у бота.")
+            return
+
+        # Успешно отправили оба клика
+        await message.delete()  # можно удалить команду, чтобы не засорять чат
